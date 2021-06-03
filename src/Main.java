@@ -65,7 +65,6 @@ public class Main {
         String st;
         while ((st = br.readLine()) != null){
             String[] line = st.split(" ");
-
             int skipper = 0 ;
             String inst = "";
             Vector<String> instruction = new Vector<>();
@@ -122,7 +121,7 @@ public class Main {
                             break;
                     }//end of switch to choose which instruction
 
-                }// end of if to excute line
+                }// end of if to execute line
 
             }// end of looping in line
 
