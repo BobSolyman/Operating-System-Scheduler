@@ -155,9 +155,9 @@ public class Main {
     }// end of parse method
 
     public static void main(String[] args) {
-        Hashtable<String, String> x= new Hashtable<>();
 
-        System.out.println(x.get("r"));
+        
+
     }
 
 }
