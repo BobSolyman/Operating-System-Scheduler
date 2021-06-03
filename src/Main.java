@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Member;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -10,13 +7,25 @@ import java.util.Vector;
 public class Main {
     public Hashtable<String, String> Memory;
 
-    public String readFile(String fileName){
+    public String readFile(String fileName) throws IOException {
         //read the file and return it as a string
-        return "";
+        String res = "" ;
+        File file = new File("src/"+fileName);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String st;
+        while ((st = br.readLine()) != null){
+            res = res + st + "/n";
+        }
+        return res;
     }
 
-    public void writeFile(String fileName, String data){
-
+    public void writeFile(String fileName, String data) throws IOException {
+        FileWriter fr = new FileWriter("src/"+fileName);
+        BufferedWriter br = new BufferedWriter(fr);
+        String d = data;
+        br.write(d);
+        br.close();
+        fr.close();
     }
 
     public void writeOutput(String print){
@@ -41,7 +50,11 @@ public class Main {
         String x = data.get(1);
         String v = readMemory(data.get(1));
         if(data.size()==3 && data.get(1).equals("readFile")){
-            x = readFile(data.get(2));
+            try {
+                x = readFile(data.get(2));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if(data.get(1).equals("input")){
             x = readInput();
@@ -53,8 +66,20 @@ public class Main {
     }
 
     public void add(String assigned, String assignee){
-        //check if they are memory variables first
-        // parse after retrieving
+        String x = assignee;
+        String v = readMemory(assignee);
+        if(readMemory(assigned)==null){
+            try {
+                writeFile(assigned, "0");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if(v!=null){
+            x= v;
+        }
+        int y = Integer.parseInt(readMemory(assigned))+Integer.parseInt(x);
+        writeMemory(assigned, y+"");
     }
 
     public void parser(String program) throws IOException {
@@ -125,7 +150,7 @@ public class Main {
 
             }// end of looping in line
 
-        }// end of loop of file
+        }// end of loop of program
 
     }// end of parse method
 
