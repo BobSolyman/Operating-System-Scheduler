@@ -178,13 +178,19 @@ public class OS {
 
             int start = Integer.parseInt(pcb[3].split(": ")[1].split("-")[0]);
             int end = Integer.parseInt(pcb[3].split(": ")[1].split("-")[1]);
-            int noInstruction = Integer.parseInt(pcb[4].split(": ")[1]);
             int pc = Integer.parseInt(pcb[2].split(": ")[1]);
             pcb[1]= "State: Running";
             Memory[start+1]= "State: Running";
+            int noInstruction = 0;
+            for (int i=start; i<=end; i++){
+                String st = Memory[i].split(" ")[0];
+                if(st.equals("print") || st.equals("add") || st.equals("assign") || st.equals("readFile") || st.equals("writeFile") || st.equals("input")){
+                    noInstruction++;
+                }
+            }
             for (int i = 0 ;i <noInstruction ; i++) {
                 if (pc < noInstruction) {
-                    String instruction = Memory[start + 5 + pc];
+                    String instruction = Memory[start + 4 + pc];
                     lineParser(instruction, start, end);
                     pc++;
                     pcb[2] = "Program Counter: " + pc;
