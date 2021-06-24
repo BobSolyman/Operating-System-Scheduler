@@ -70,8 +70,10 @@ public class OS {
 
             if((Memory[i].split("=")[0]).equals(x)){
                 if((Memory[i].split("=")).length==1){
+                    System.out.println("Reading "+Memory[i]);
                     return null;
                 }
+                System.out.println("Reading "+Memory[i]);
                 return Memory[i].split("=")[1];
             }
         }
@@ -82,6 +84,7 @@ public class OS {
         for (int i=start; i<=end; i++){
             if((Memory[i].split("=")[0]).equals(assigned)){
                 Memory[i] = assigned+"="+assignee;
+                System.out.println("Writing "+Memory[i]);
             }
         }
     }
@@ -281,6 +284,10 @@ public class OS {
             queue.add(PCB);
             progStart = ++progEnd;
         }
+        for (int i=0; i<Memory.length; i++){
+            System.out.println(Memory[i]);
+        }
+
     }
 
     public void lineParser(String st, int start, int end) throws IOException {
@@ -329,10 +336,11 @@ public class OS {
     }
 
     public void roundRobin2 () throws IOException {
-
+        System.out.println("");
+        System.out.println("~Executing~");
         while (!queue.isEmpty()){
             String[] pcb = queue.remove();
-
+            System.out.println(pcb[0]);
             int start = Integer.parseInt(pcb[3].split(": ")[1].split("-")[0]);
             int end = Integer.parseInt(pcb[3].split(": ")[1].split("-")[1]);
             int pc = Integer.parseInt(pcb[2].split(": ")[1]);
@@ -345,6 +353,7 @@ public class OS {
                     noInstruction++;
                 }
             }
+            int quanta = 0;
             for (int i = 0 ;i <2 ; i++) {
                 if (pc < noInstruction) {
                     String instruction = Memory[start + 4 + pc];
@@ -352,6 +361,7 @@ public class OS {
                     pc++;
                     pcb[2] = "Program Counter: " + pc;
                     Memory[start+2]="Program Counter: " + pc;
+                    quanta++;
                 }
                 else {
                     break;
@@ -366,7 +376,8 @@ public class OS {
                 Memory[start+1]= "State: Done";
                 pcb[1]= "State: Done";
             }
-
+            System.out.println(pcb[0]+" ran for "+quanta+" quanta");
+            System.out.println("");
 
         }// end of queue
 
@@ -407,6 +418,7 @@ public class OS {
         catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("");
         System.out.println("~Memory~");
         for (int i=0; i<x.Memory.length; i++){
             System.out.println(x.Memory[i]);
