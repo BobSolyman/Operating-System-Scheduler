@@ -113,6 +113,7 @@ public class OS {
         writeMemory(assigned, y+"", start, end);
     }
 
+    //was used in milestone1 submission
     public void parser(String program, int start, int end) throws IOException {
 
         File file = new File("src/"+program);
@@ -216,7 +217,7 @@ public class OS {
 
             BufferedReader br = new BufferedReader(new FileReader(file));
             String st = "";
-            linesNeeded+=5;
+            linesNeeded+=4;
             while ((st = br.readLine()) != null){
                 String[] line = st.split(" ");
                 for(int j=0; j< line.length; j++){
@@ -239,14 +240,12 @@ public class OS {
         int progEnd = 0;
         for(int i=0; i<programs.size(); i++){
             Set<String> variables = new HashSet<>();
-            int insCounter = 0;
             File file = new File("src/"+programs.get(i));
             String name = (programs.get(i).substring(8, programs.get(i).length()-4));
             Memory[progEnd++] = "ID: Process " + name;
             Memory[progEnd++] = "State: Ready";
             Memory[progEnd++] = "Program Counter: 0";
             Memory[progEnd++] = "Memory Boundaries: "+progStart+"-";
-            Memory[progEnd++] = "Number of Instructions: ";
             BufferedReader br = new BufferedReader(new FileReader(file));
             String st = "";
             while ((st = br.readLine()) != null){
@@ -260,7 +259,6 @@ public class OS {
                     }
                 }
                 Memory[progEnd++] = st;
-                insCounter++;
             }
 
             Iterator<String> it = variables.iterator();
@@ -269,13 +267,11 @@ public class OS {
             }
             progEnd--;
             Memory[progStart+3]+= progEnd;
-            Memory[progStart+4] += insCounter;
-            String[] PCB = new String[5];
+            String[] PCB = new String[4];
             PCB[0] = Memory[progStart];
             PCB[1] = Memory[progStart+1];
             PCB[2] = Memory[progStart+2];
             PCB[3] = Memory[progStart+3];
-            PCB[4] = Memory[progStart+4];
             queue.add(PCB);
             progStart = ++progEnd;
         }
@@ -333,13 +329,19 @@ public class OS {
 
             int start = Integer.parseInt(pcb[3].split(": ")[1].split("-")[0]);
             int end = Integer.parseInt(pcb[3].split(": ")[1].split("-")[1]);
-            int noInstruction = Integer.parseInt(pcb[4].split(": ")[1]);
             int pc = Integer.parseInt(pcb[2].split(": ")[1]);
             pcb[1]= "State: Running";
             Memory[start+1]= "State: Running";
+            int noInstruction = 0;
+            for (int i=start; i<=end; i++){
+                String st = Memory[i].split(" ")[0];
+                if(st.equals("print") || st.equals("add") || st.equals("assign") || st.equals("readFile") || st.equals("writeFile") || st.equals("input")){
+                    noInstruction++;
+                }
+            }
             for (int i = 0 ;i <2 ; i++) {
                 if (pc < noInstruction) {
-                    String instruction = Memory[start + 5 + pc];
+                    String instruction = Memory[start + 4 + pc];
                     lineParser(instruction, start, end);
                     pc++;
                     pcb[2] = "Program Counter: " + pc;
@@ -399,7 +401,7 @@ public class OS {
         catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println("~Memory~");
         for (int i=0; i<x.Memory.length; i++){
             System.out.println(x.Memory[i]);
         }
