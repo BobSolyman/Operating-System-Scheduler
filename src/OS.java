@@ -338,9 +338,11 @@ public class OS {
     public void roundRobin2 () throws IOException {
         System.out.println("");
         System.out.println("~Executing~");
+        int sliceNum = 1;
         while (!queue.isEmpty()){
             String[] pcb = queue.remove();
-            System.out.println(pcb[0]);
+            System.out.println(pcb[0]+", Slice: "+sliceNum);
+            sliceNum++;
             int start = Integer.parseInt(pcb[3].split(": ")[1].split("-")[0]);
             int end = Integer.parseInt(pcb[3].split(": ")[1].split("-")[1]);
             int pc = Integer.parseInt(pcb[2].split(": ")[1]);
